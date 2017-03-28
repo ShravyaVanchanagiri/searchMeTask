@@ -1,0 +1,28 @@
+<h1 class="text-center">Search User Here</h1>
+<fieldset class="f1">
+    <form name="userForm">
+        <div class="form-group">
+
+            <label>First Name:</label>
+            <input type="text" name="fname" class="form-control" ng-model="hc.user.fname" placeholder="Your First Name">
+            <label>Last Name:</label>
+            <input type="text" name="lname" class="form-control" ng-model="hc.user.lname" placeholder="Your Last Name">
+
+            <label>Date Of Birth:</label>
+            <input type="date" name="dob" class="form-control" ng-model="hc.user.dob">
+
+            <label>Address:</label>
+            <input type="text" name="address" class="form-control" ng-model="hc.user.address" placeholder="Your address here">
+            <br/>
+            <center>
+                <button ng-click="hc.funOk()" class="btn btn-success">Search</button>
+                <button ng-click="" class="btn btn-danger">Clear</button>
+            </center>
+
+        </div>
+    </form>
+</fieldset>
+
+<div class="row" ng-if="hc.users.length>0">
+    <table-component table-params="hc.tableParams"></table-component>
+</div>

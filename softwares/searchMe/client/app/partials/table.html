@@ -1,0 +1,21 @@
+<br>
+<fieldset class="f1">
+    <table ng-table="tc.tableParams" class="table" show-filter="true"
+           class="table table-condensed table-bordered table-striped table1">
+        <caption class="text-center text-info"><h2>Users Based on Search Criteria</h2></caption>
+        <tr ng-repeat="post in $data">
+            <td title="'First Name'" filter="{ firstName: 'text'}" sortable="'firstName'">
+                {{post.firstName}}
+            </td>
+            <td title="'Last Name'" filter="{ lastName: 'text'}" sortable="'lastName'">
+                {{post.lastName}}
+            </td>
+            <td title="'Date Of Birth'" filter="{ dateOfBirth: 'text'}" sortable="'dateOfBirth'">
+                {{post.dateOfBirth}}
+            </td>
+            <td title="'Address'" filter="{ address: 'text'}" sortable="'address'">
+                {{post.address}}
+            </td>
+        </tr>
+    </table>
+</fieldset>
