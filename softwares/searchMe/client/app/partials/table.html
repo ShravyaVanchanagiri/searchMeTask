@@ -5,16 +5,23 @@
         <caption class="text-center text-info"><h2>Users Based on Search Criteria</h2></caption>
         <tr ng-repeat="post in $data">
             <td title="'First Name'" filter="{ firstName: 'text'}" sortable="'firstName'">
-                {{post.firstName}}
+                {{post.users.firstName}}
             </td>
             <td title="'Last Name'" filter="{ lastName: 'text'}" sortable="'lastName'">
-                {{post.lastName}}
+                {{post.users.lastName}}
             </td>
             <td title="'Date Of Birth'" filter="{ dateOfBirth: 'text'}" sortable="'dateOfBirth'">
-                {{post.dateOfBirth}}
+                {{post.users.dateOfBirth}}
             </td>
-            <td title="'Address'" filter="{ address: 'text'}" sortable="'address'">
-                {{post.address}}
+            <td title="'Address'" filter="{ address: 'text'}" sortable="'address'" >
+                <div ng-repeat="add in post.data">
+                    <span ng-bind="add.address.houseNo"></span><br>
+                    <span ng-bind="add.address.street"></span><br>
+                    <span ng-bind="add.address.city"></span><br>
+                    <span ng-bind="add.address.state"></span><br><br>
+                </div>
+
+
             </td>
         </tr>
     </table>

@@ -8,63 +8,57 @@ var addressModel = require("../models/addressModel");
 var userRouter = {
     getUserDetails: function (req, res) {
         var queryParam = (req.query && req.query.q) ? JSON.parse(req.query.q) : req.body.q;
-        var query={};
-        if(queryParam.firstName){
-            query.firstName=queryParam.firstName;
+        console.log(queryParam);
+        var query = [];
+        var orList = [];
+        if (queryParam.firstName) {
+            orList.push({"firstName": queryParam.firstName})
         }
-        if(queryParam.lastName){
-            query.lastName=queryParam.lastName;
+        if (queryParam.lastName) {
+            orList.push({"lastName": queryParam.lastName})
         }
-        if(queryParam.dateOfBirth){
-            query.dateOfBirth=queryParam.dateOfBirth;
+        if (queryParam.dateOfBirth) {
+            orList.push({"dateOfBirth": new Date(queryParam.dateOfBirth)})
         }
-        if(queryParam.address){
-            query.address=queryParam.address;
+        console.log(orList);
+        if (orList.length != 0) {
+            query.push({"$match": {$or: orList}});
         }
-        var aggregate = [
-            {"$match":query},
-            { "$unwind": "$addresses" }
-        ];
-        console.log(JSON.stringify(aggregate));
-        userModel.aggregate(aggregate, function(err1,users) {
+        query.push({"$unwind": "$addresses"},
+            {"$lookup": {"from": "addresses", "localField": "addresses", "foreignField": "_id", "as": "address"}});
+        if (queryParam.address) {
+            query.push({
+                "$match": {
+                    $or: [{"address.city": queryParam.address}, {"address.street": queryParam.address},
+                        {"address.state": queryParam.address}]
+                }
+            })
+        }
+        query.push({"$unwind": "$address"}, {
+                "$group": {
+                    "_id": "$_id", "data": {
+                        "$addToSet": {
+                            "address": "$address",
+                            "user": {
+                                "_id": "$_id", "firstName": "$firstName", "lastName": "$lastName",
+                                "dateOfBirth": "$dateOfBirth"
+                            }
+                        }
+                    }
+                }
+            },
+            {"$project": {"data.address": 1, "users": {"$arrayElemAt": ["$data.user", 0]}}});
+
+
+        userModel.aggregate(query)  .skip(queryParam.numberToSkip).limit(queryParam.limit).exec(function (err1, users) {
             if (err1) {
-                console.log(err);
+                console.log(err1);
                 res.send(errorRes(500, "Failed"));
             } else {
-                console.log("users",users);
+                console.log(users);
                 res.send(prepareRes(200, users, "OK"));
             }
         });
     }
 };
 module.exports = userRouter;
-
-
-/*
-userModel.find(query,function (err, users) {
-    if (err) {
-        console.log(err);
-        res.send(errorRes(500, "Failed"));
-    } else {
-        console.log("users",users)
-        res.send(prepareRes(200, users, "OK"));
-    }
-});*/
-/*
-{"$match":{ $or:[{"firstName":query}, {"lastName" : query}, {"address.state" : query}]}}*/
-
-/*
-userModel.aggregate([
-    {"$match":{ "firstName" : query.firstName, "lastName" : query.lastName, "dateOfBirth" : query.dateOfBirth, "address" : query.address}},
-    { "$unwind": "$addresses" },
-    {"$lookup":{"from":"addresses","localField":"addresses","foreignField":"_id","as":"address"}},
-    {"$match":{$or:[{"address.city":query.address}, {"address.street" : query.address}, {"address.state" : query.address}]}}
-]).exec(function(err1,users) {
-    if (err1) {
-        console.log(err);
-        res.send(errorRes(500, "Failed"));
-    } else {
-        console.log("users",users)
-        res.send(prepareRes(200, users, "OK"));
-    }
-});*/

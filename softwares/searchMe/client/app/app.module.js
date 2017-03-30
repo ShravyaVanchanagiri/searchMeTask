@@ -9,6 +9,7 @@
         "ngResource",
         "ui.select",
         "ngSanitize",
-        "ngTable"
+        "ngTable",
+        "720kb.datepicker"
     ])
 })();
