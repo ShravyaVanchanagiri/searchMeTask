@@ -50,7 +50,7 @@ var userRouter = {
             {"$project": {"data.address": 1, "users": {"$arrayElemAt": ["$data.user", 0]}}});
 
 
-        userModel.aggregate(query)  .skip(queryParam.numberToSkip).limit(queryParam.limit).exec(function (err1, users) {
+        userModel.aggregate(query).skip(queryParam.numberToSkip).limit(queryParam.limit).exec(function (err1, users) {
             if (err1) {
                 console.log(err1);
                 res.send(errorRes(500, "Failed"));
