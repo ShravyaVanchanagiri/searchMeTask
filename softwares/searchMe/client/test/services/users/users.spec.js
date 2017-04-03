@@ -17,7 +17,19 @@ describe('Home controller', function(){
                 "city":"warangal",
                 "state":"Telangana",
                 "__v":0}},{
-            "address":{"_id":"58da5e205c950410c8677c72","street":"KPHB colony","houseNo":"181","city":"Hyderabad","state":"Telangana","__v":0}}],"users":{"_id":"58da5e205c950410c8677c7e","firstName":"Shravya","lastName":"Vanchanagiri","dateOfBirth":"1994-10-16T18:30:00.000Z"}}],"message":"OK"};
+            "address":{
+                "_id":"58da5e205c950410c8677c72",
+                "street":"KPHB colony",
+                "houseNo":"181",
+                "city":"Hyderabad",
+                "state":"Telangana",
+                "__v":0}}],
+            "users":{
+                "_id":"58da5e205c950410c8677c7e",
+                "firstName":"Shravya",
+                "lastName":"Vanchanagiri",
+                "dateOfBirth":"1994-10-16T18:30:00.000Z"}
+    }],"message":"OK"};
     var outputObject = responseObject.data;
 
     beforeEach(function(){
@@ -46,7 +58,7 @@ describe('Home controller', function(){
     });
     describe('users',function(){
         it('users check',function (){
-            var user={}
+            var user={};
             user.firstName="Shravya"
             var controller = $controller('homeController', {$scope : $scope})
             controller.funOk(user);
