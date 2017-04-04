@@ -9,16 +9,42 @@
 
     function homeController($http, homeService, $rootScope, $state, NgTableParams, $filter) {
         var vm = this;
-        vm.funOk = funOk;
+        vm.clear = clear;
         vm.user={};
+        vm.minlength = 3;
+        vm.funOk = funOk;
+        vm.dateOpenStatus =  false;
+        vm.setDpOpenStatus = setDpOpenStatus;
+
+        function setDpOpenStatus(){
+            vm.dateOpenStatus =! vm.dateOpenStatus;
+        }
+        function clear(){
+            console.log("coming to clear");
+            vm.user={};
+        }
+
+        vm.currentDate = new Date();
+        vm.errorMessage = false;
+
         loadTable();
         function funOk() {
-            vm.tableParams.reload();
+            console.log("------------------vm.user------------------");
+            console.log(vm.user);
+            if (vm.user.dob == null && vm.user.fname == null && vm.user.lname == null && vm.user.address == null) {
+                console.log("coming to empty user");
+                vm.errorMessage = true;
+            }
+            else {
+                console.log("coming to exist user");
+                vm.errorMessage = false;
+                vm.tableParams.reload();
+            }
         }
         function loadTable(){
             vm.tableParams = new NgTableParams({
                 page: 1,
-                count: 5
+                count: 2
             }, {
                 getData: function (params) {
                     var query = {
@@ -34,13 +60,14 @@
 
                     return homeService.getUserDetails(query).then(
                         function (response) {
-                            console.log("coming here");
                             vm.users = response.data;
                             var filterObj = params.filter(), filteredData = $filter('filter')(vm.users, filterObj);
                             var postsData = $filter('orderBy')(filteredData, params.orderBy());
                             vm.data = postsData.slice((params.page() - 1) * params.count(), params.page() * params.count());
                             params.total(vm.users);
-                            return vm.data;
+                            console.log("vm.data");
+                            console.log(vm.data);
+                                return vm.data;
                         },
                         function (failure) {
                             console.log(failure);

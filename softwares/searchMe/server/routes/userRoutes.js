@@ -5,10 +5,11 @@ var prepareRes = require("../apiUtils/prepareRes");
 var errorRes = require("../apiUtils/errorRes");
 var userModel = require("../models/userModel");
 var addressModel = require("../models/addressModel");
+var dateUtil = require("../commonUtils/dateUtil");
 var userRouter = {
     getUserDetails: function (req, res) {
         var queryParam = (req.query && req.query.q) ? JSON.parse(req.query.q) : req.body.q;
-        console.log(queryParam);
+        console.log("#%#%#%#%#%#%#%#%#%#%#%#%#%#%#%#%#%#%#",queryParam);
         var query = [];
         var orList = [];
         if (queryParam.firstName) {
@@ -18,7 +19,7 @@ var userRouter = {
             orList.push({"lastName": queryParam.lastName})
         }
         if (queryParam.dateOfBirth) {
-            orList.push({"dateOfBirth": new Date(queryParam.dateOfBirth)})
+            orList.push({"dateOfBirth": dateUtil.getDate(queryParam.dateOfBirth)})
         }
         console.log(orList);
         if (orList.length != 0) {
@@ -49,7 +50,7 @@ var userRouter = {
             },
             {"$project": {"data.address": 1, "users": {"$arrayElemAt": ["$data.user", 0]}}});
 
-
+        console.log(query);
         userModel.aggregate(query).skip(queryParam.numberToSkip).limit(queryParam.limit).exec(function (err1, users) {
             if (err1) {
                 console.log(err1);

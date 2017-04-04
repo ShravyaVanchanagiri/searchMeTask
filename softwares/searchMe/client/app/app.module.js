@@ -10,6 +10,7 @@
         "ui.select",
         "ngSanitize",
         "ngTable",
-        "720kb.datepicker"
+        "720kb.datepicker",
+        "ui.bootstrap"
     ])
 })();

@@ -7,6 +7,7 @@
 
             bindings: {
                 tableParams: '=',
+                data : '='
             },
             templateUrl: 'partials/table.html',
             controller: tableController,

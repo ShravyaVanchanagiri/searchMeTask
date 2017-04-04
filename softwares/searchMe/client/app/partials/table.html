@@ -3,7 +3,7 @@
     <table ng-table="tc.tableParams" class="table" show-filter="true"
            class="table table-condensed table-bordered table-striped table1">
         <caption class="text-center text-info"><h2>Users Based on Search Criteria</h2></caption>
-        <tr ng-repeat="post in $data">
+        <tr ng-repeat="post in $data | orderBy:'users.firstName'">
             <td title="'First Name'" filter="{ firstName: 'text'}" sortable="'firstName'">
                 {{post.users.firstName}}
             </td>
@@ -15,13 +15,11 @@
             </td>
             <td title="'Address'" filter="{ address: 'text'}" sortable="'address'" >
                 <div ng-repeat="add in post.data">
-                    <span ng-bind="add.address.houseNo"></span><br>
-                    <span ng-bind="add.address.street"></span><br>
-                    <span ng-bind="add.address.city"></span><br>
-                    <span ng-bind="add.address.state"></span><br><br>
+                    <span ng-bind="add.address.houseNo"></span>,<br>
+                    <span ng-bind="add.address.street"></span>,<br>
+                    <span ng-bind="add.address.city"></span>,<br>
+                    <span ng-bind="add.address.state"></span>.<br><br>
                 </div>
-
-
             </td>
         </tr>
     </table>

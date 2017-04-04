@@ -18,6 +18,5 @@
             console.log(query);
             return api.getUserDetails({q:query}).$promise;
         }
-
     }
 })();
